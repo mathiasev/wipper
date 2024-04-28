@@ -14,13 +14,83 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model User {
+    id String @id
 
+    Organisation   Organisation? @relation(fields: [organisationId], references: [id])
+    organisationId String?
+}
+
+model Organisation {
+    id String @id @default(cuid())
+
+    name String? @default("Default Organisation")
+
+    users User[]
+}
+
+model Company {
+    id          String    @id @default(cuid())
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    deletedAt   DateTime?
     createdById String
 
+    name String
+
+    contacts Contact[]
+    projects Project[]
+
     @@index([name])
+}
+
+model Contact {
+    id          String    @id @default(cuid())
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    deletedAt   DateTime?
+    createdById String
+
+    name  String
+    email String
+
+    companyId String
+    Company   Company @relation(fields: [companyId], references: [id])
+}
+
+model Project {
+    id          String    @id @default(cuid())
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    deletedAt   DateTime?
+    createdById String
+
+    name        String
+    description String
+    startDate   DateTime?
+    dueDate     DateTime?
+
+    updates ProjectUpdate[]
+
+    companyId String
+    Company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+    @@index([companyId, id])
+}
+
+model ProjectUpdate {
+    id          String    @id @default(cuid())
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    deletedAt   DateTime?
+    createdById String
+
+    updateBody String
+    internal   Boolean @default(false)
+    notify     Boolean @default(true)
+
+    Project   Project @relation(fields: [projectId], references: [id])
+    projectId String
+
+    @@index([projectId, id])
 }

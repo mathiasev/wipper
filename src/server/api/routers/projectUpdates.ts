@@ -6,7 +6,7 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 
-export const postRouter = createTRPCRouter({
+export const projectUpdateRouter = createTRPCRouter({
   hello: publicProcedure
     .input(z.object({ text: z.string() }))
     .query(({ input }) => {
@@ -16,21 +16,25 @@ export const postRouter = createTRPCRouter({
     }),
 
   create: protectedProcedure
-    .input(z.object({ name: z.string().min(1) }))
-    .mutation(async ({ ctx, input }) => {
-      // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+    .input(z.object({
+      updateBody: z.string().min(1),
+      projectId: z.string()
+    }))
 
-      return ctx.db.post.create({
+    .mutation(async ({ ctx, input }) => {
+
+
+      return ctx.db.projectUpdate.create({
         data: {
-          name: input.name,
-          createdById: ctx.session.userId
+          updateBody: input.updateBody,
+          createdById: ctx.session.userId,
+          projectId: input.projectId
         },
       });
     }),
 
   getLatest: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.post.findFirst({
+    return ctx.db.projectUpdate.findFirst({
       orderBy: { createdAt: "desc" },
       where: { createdById: { equals: ctx.session.userId } },
     });

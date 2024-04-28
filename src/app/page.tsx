@@ -1,11 +1,11 @@
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
-import { CreatePost } from "~/app/_components/create-post";
+import { CreateProjectUpdate } from "~/app/_components/create-project-update";
 import { api } from "~/trpc/server";
 
 export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
+  // const hello = await api.post.hello({ text: "from tRPC" });
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
@@ -39,7 +39,7 @@ export default async function Home() {
         </div>
         <div className="flex flex-col items-center gap-2">
           <p className="text-2xl text-white">
-            {hello ? hello.greeting : "Loading tRPC query..."}
+            {/* {hello ? hello.greeting : "Loading tRPC query..."} */}
           </p>
 
           <div className="flex flex-col items-center justify-center gap-4">
@@ -65,17 +65,17 @@ async function CrudShowcase() {
   const session = auth();
   if (!session?.userId) return null;
 
-  const latestPost = await api.post.getLatest();
+  const latestUpdate = await api.projectUpdate.getLatest();
 
   return (
     <div className="w-full max-w-xs">
-      {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.name}</p>
+      {latestUpdate ? (
+        <p className="truncate">Your most recent post: {latestUpdate.updateBody.substring(0, 20)}...</p>
       ) : (
-        <p>You have no posts yet.</p>
+        <p>You have no updates yet.</p>
       )}
 
-      <CreatePost />
+      <CreateProjectUpdate />
     </div>
   );
 }
