@@ -3,8 +3,10 @@ import "~/styles/globals.css";
 import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
-
+import { ThemeProvider } from "~/lib/theme-provider";
 import { ClerkProvider } from '@clerk/nextjs'
+import { ThemeToggle } from "~/app/_components/theme-toggle";
+import { Toaster } from "~/components/ui/sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,11 +26,26 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={`font-sans ${inter.variable}`}>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
-        </body>
-      </html>
+      <TRPCReactProvider>
+        <html lang="en">
+          <body className={`font-sans ${inter.variable}`}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange>
+              <header className="flex justify-between">
+                <span>Wipper</span>
+                <ThemeToggle />
+              </header>
+              <main>
+                {children}
+              </main>
+              <Toaster />
+            </ThemeProvider>
+          </body>
+        </html>
+      </TRPCReactProvider>
     </ClerkProvider>
   );
 }

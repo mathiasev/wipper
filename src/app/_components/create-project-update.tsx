@@ -1,7 +1,9 @@
 "use client";
 
+import { Prisma } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { api } from "~/trpc/react";
 
@@ -15,7 +17,16 @@ export function CreateProjectUpdate() {
       router.refresh();
       setUpdateBody("");
       setProjectId("");
+      toast("Project Update created", {
+        description: updateBody
+      })
     },
+    onError: (e) => {
+      if (e instanceof Prisma.PrismaClientKnownRequestError)
+        toast('Error creating update', {
+          description: e.message
+        })
+    }
   });
 
 
