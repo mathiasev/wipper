@@ -1,4 +1,3 @@
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { Suspense } from "react";
 import { CreateProjectUpdate } from "~/components/create-project-update";

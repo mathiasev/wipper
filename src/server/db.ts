@@ -15,6 +15,7 @@ const createPrismaClient = () =>
         ): Promise<Prisma.Result<M, A, 'update'>> {
           const context = Prisma.getExtensionContext(this)
 
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-member-access
           return (context as any).update({
             ...where,
             data: {

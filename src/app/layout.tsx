@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { ThemeProvider } from "~/lib/theme-provider";
-import { ClerkProvider, SignIn, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 
 import { Toaster } from "~/components/ui/sonner";
 
@@ -22,7 +22,7 @@ export const metadata = {
 
 
 import Link from "next/link"
-import { CircleUser, Menu, Package2, Search } from "lucide-react"
+import { Menu, Package2, Search } from "lucide-react"
 
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"

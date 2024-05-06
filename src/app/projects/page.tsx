@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server"
 
 
-import { RedirectType, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default async function ProjectsPage() {
     const session = auth();
