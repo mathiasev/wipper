@@ -29,6 +29,7 @@ import { Input } from "~/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet"
 import { cn } from "~/lib/utils";
 import Navigation from "~/components/navigation";
+import menu from "./_navigation/menu";
 
 
 export default function RootLayout({
@@ -66,45 +67,12 @@ export default function RootLayout({
                     </SheetTrigger>
                     <SheetContent side="left">
                       <nav className="grid gap-6 text-lg font-medium">
-                        <Link
-                          href="/"
-                          className="flex items-center gap-2 text-lg font-semibold"
-                        >
-                          <Package2 className="h-6 w-6" />
-                          <span className="sr-only">Acme Inc</span>
-                        </Link>
-                        <Link
-                          href="/"
-                          className="text-muted-foreground hover:text-foreground"
-                        >
-                          Projects
-                        </Link>
-                        <Link
-                          href="#"
-                          className="text-muted-foreground hover:text-foreground"
-                        >
-                          Orders
-                        </Link>
-                        <Link
-                          href="#"
-                          className="text-muted-foreground hover:text-foreground"
-                        >
-                          Products
-                        </Link>
-                        <Link
-                          href="#"
-                          className="text-muted-foreground hover:text-foreground"
-                        >
-                          Customers
-                        </Link>
-                        <Link href="#" className="hover:text-foreground">
-                          Settings
-                        </Link>
+                        <Menu />
                       </nav>
                     </SheetContent>
                   </Sheet>
-                  <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-                    <form className="ml-auto flex-1 sm:flex-initial">
+                  <div className="flex justify-end w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+                    {/* <form className="ml-auto flex-1 sm:flex-initial">
                       <div className="relative">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
@@ -113,7 +81,7 @@ export default function RootLayout({
                           className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
                         />
                       </div>
-                    </form>
+                    </form> */}
                     <SignedIn>
                       <UserButton />
                     </SignedIn>
