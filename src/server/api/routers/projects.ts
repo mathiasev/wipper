@@ -12,7 +12,9 @@ export const projectRouter = createTRPCRouter({
     .input(z.object({
       name: z.string().min(1),
       description: z.string().min(1),
-      companyId: z.string().min(1)
+      companyId: z.string().min(1),
+      startDate: z.date().optional(),
+      dueDate: z.date().optional()
     }))
 
     .mutation(async ({ ctx, input }) => {
@@ -22,16 +24,32 @@ export const projectRouter = createTRPCRouter({
           description: input.description,
           companyId: input.companyId,
           createdById: ctx.session.userId,
+          dueDate: input.dueDate,
+          startDate: input.startDate
         },
       });
     }),
 
   getLatest: protectedProcedure
     .input(z.object({
+      companyId: z.string().optional(),
       page_size: z.number().default(5),
       page: z.number().default(0)
     }))
     .query(({ ctx, input }) => {
+
+      if (input.companyId) {
+        return ctx.db.project.findMany({
+          orderBy: { createdAt: "desc" },
+          where: {
+            createdById: { equals: ctx.session.userId },
+            companyId: { equals: input.companyId }
+          },
+          take: input.page_size,
+          skip: input.page
+        })
+      }
+
       return ctx.db.project.findMany({
         orderBy: { createdAt: "desc" },
         where: { createdById: { equals: ctx.session.userId }, },
