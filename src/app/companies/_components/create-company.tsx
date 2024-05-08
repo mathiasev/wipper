@@ -25,11 +25,11 @@ export function CreateCompany() {
 
     const createCompany = api.company.create.useMutation({
         onSuccess: () => {
-            router.refresh();
-            setCompanyName("");
             toast("Company created", {
                 description: companyName
             })
+            setCompanyName("");
+
         },
         onError: (e) => {
             if (e instanceof Prisma.PrismaClientKnownRequestError)

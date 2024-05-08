@@ -22,8 +22,8 @@ import Link from "next/link";
 
 
 export function CompanyList() {
-    const [companies, companyQuery] = api.company.getLatest.useSuspenseQuery();
-    if (companyQuery.isError) return (
+    const [projects, projectQuery] = api.projects.getLatest.useSuspenseQuery();
+    if (projectQuery.isError) return (
         <Badge variant={"destructive"}>Error</Badge>
     )
 

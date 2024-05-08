@@ -16,12 +16,7 @@ export default async function ProjectsPage() {
             <PageHeader>Companies</PageHeader>
             <div className="flex flex-col gap-4">
                 <CreateCompany />
-
-                <Suspense fallback={
-                    <p>Loading</p>
-                }>
-                    <CompanyList />
-                </Suspense>
+                <CompanyList />
             </div>
         </>
     )

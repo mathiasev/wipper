@@ -29,6 +29,19 @@ export const companyRouter = createTRPCRouter({
     });
   }),
 
+  getCompanyById: protectedProcedure
+    .input(z.object({
+      companyId: z.string()
+    }))
+    .query(({ ctx, input }) => {
+      return ctx.db.company.findFirst({
+        where: {
+          id: { equals: input.companyId },
+          createdById: { equals: ctx.session.userId }
+        }
+      })
+    }),
+
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
