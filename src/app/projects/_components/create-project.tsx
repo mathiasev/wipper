@@ -13,8 +13,20 @@ import {
     SheetTrigger,
 } from "~/components/ui/sheet"
 import { CreateProjectForm } from "./create-project-form"
+import { useState } from "react"
+
+
 
 export function CreateProjectSheet({ companyId = undefined }: { companyId: string | undefined }) {
+
+
+    const [showForm, setShowForm] = useState(true)
+
+    function handleCreate() {
+        setShowForm(false)
+    }
+
+
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -30,7 +42,7 @@ export function CreateProjectSheet({ companyId = undefined }: { companyId: strin
                         Create a new project
                     </SheetDescription>
                 </SheetHeader>
-                <CreateProjectForm />
+                <CreateProjectForm createdEvent={handleCreate} companyId={companyId} />
                 {/* <SheetFooter>
                     <SheetClose asChild>
                         <Button type="submit">Save changes</Button>

@@ -12,9 +12,7 @@ export const projectRouter = createTRPCRouter({
     .input(z.object({
       name: z.string().min(1),
       description: z.string().min(1),
-      companyId: z.string().min(1),
-      startDate: z.date().optional(),
-      dueDate: z.date().optional()
+      companyId: z.string().min(1)
     }))
 
     .mutation(async ({ ctx, input }) => {
@@ -23,9 +21,7 @@ export const projectRouter = createTRPCRouter({
           name: input.name,
           description: input.description,
           companyId: input.companyId,
-          createdById: ctx.session.userId,
-          dueDate: input.dueDate,
-          startDate: input.startDate
+          createdById: ctx.session.userId
         },
       });
     }),

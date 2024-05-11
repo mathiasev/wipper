@@ -43,11 +43,11 @@ export default function RootLayout({
     <ClerkProvider>
       <TRPCReactProvider>
         <html lang="en" suppressHydrationWarning>
-          <body >
+          <body className="dark">
             <ThemeProvider
               attribute="class"
-              defaultTheme="system"
-              enableSystem
+              defaultTheme="dark"
+
 
             >
               {/* Start UI */}

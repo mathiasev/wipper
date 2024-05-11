@@ -44,7 +44,7 @@ export function ProjectList({ companyId = undefined }: { companyId: string | und
                 <div className="flex justify-between gap-4">
                     <div>
                         <CardTitle>Projects</CardTitle>
-                        <CardDescription>All projects</CardDescription>
+                        <CardDescription>All projects for {companyId}</CardDescription>
                     </div>
                     <CreateProjectSheet companyId={companyId} />
                 </div>

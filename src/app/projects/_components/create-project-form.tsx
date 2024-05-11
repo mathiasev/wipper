@@ -22,6 +22,13 @@ import {
     PopoverTrigger,
 } from "~/components/ui/popover"
 import { Calendar } from "~/components/ui/calendar"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "~/components/ui/select"
 
 import { Input } from "~/components/ui/input"
 import { Textarea } from "~/components/ui/textarea"
@@ -29,6 +36,8 @@ import { cn } from "~/lib/utils"
 import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { api } from "~/trpc/react"
+import { propagateServerField } from "next/dist/server/lib/render-server"
+import { ReactEventHandler } from "react"
 
 const FormSchema = z.object({
     name: z.string().min(1, {
@@ -37,41 +46,58 @@ const FormSchema = z.object({
     description: z.string().min(1, {
         message: "Project description is required."
     }),
-    startDate: z.date().optional(),
-    dueDate: z.date().optional(),
     companyId: z.string()
 
 })
 
 
-export function CreateProjectForm({ companyId = undefined }: { companyId: string | undefined }) {
-    const createProject = api.project.create.useMutation({
-        onSuccess: () => {
-            toast("Project created",
-            )
-        }
-    });
-
+export function CreateProjectForm({ companyId = undefined, handleCreate }: { companyId: string | undefined, handleCreate: ReactEventHandler }) {
+    let companies = undefined;
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            companyId: companyId
+            companyId: companyId,
+            name: "",
+            description: ''
+        },
+        context: companyId
+
+    })
+
+    if (companyId === undefined) {
+        companies = api.company.getLatest.useQuery();
+    }
+
+
+    const { mutate } = api.project.create.useMutation({
+        onSuccess: (e) => {
+            toast("Project created")
+            form.reset();
+
+        },
+        onError: (e) => {
+            toast("Error", {
+                important: true,
+                description: JSON.stringify(e.message)
+            })
         }
     })
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        createProject.mutate({
+        mutate({
             name: data.name,
             description: data.description,
-            companyId: data.companyId,
-            startDate: data.startDate,
-            dueDate: data.dueDate
+            companyId: data.companyId
         })
+
+        console.log(data);
     }
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <p className="font-mono">{companyId}</p>
+                <p>{JSON.stringify(form.formState.errors)}</p>
                 <FormField
                     control={form.control}
                     name="name"
@@ -104,94 +130,34 @@ export function CreateProjectForm({ companyId = undefined }: { companyId: string
                         </FormItem>
                     )}
                 />
-                <FormField
+                {companyId === undefined && companies !== undefined && (<FormField
                     control={form.control}
-                    name="startDate"
+                    name="companyId"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Start date</FormLabel>
-                            <FormControl>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant={"outline"}
-                                            className={cn(
-                                                "w-full pl-3 text-left font-normal",
-                                                !field.value && "text-muted-foreground"
-                                            )}
-                                        >
-                                            {field.value ? (
-                                                format(field.value, "PPP")
-                                            ) : (
-                                                <span>Pick a date</span>
-                                            )}
-                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0" align="start">
-                                        <Calendar
-                                            mode="single"
-                                            selected={field.value}
-                                            onSelect={field.onChange}
-                                            disabled={(date) =>
-                                                date < new Date("1900-01-01")
-                                            }
-                                            initialFocus
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                            </FormControl>
+                            <FormLabel>Company</FormLabel>
+
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a company." />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    {companies?.data?.map(company => (
+                                        <SelectItem value={company.id}>{company.name}</SelectItem>
+                                    ))}
+
+                                </SelectContent>
+                            </Select>
+
                             <FormDescription>
-                                What is the project start date?
+                                What is the project description?
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
-                />
-                <FormField
-                    control={form.control}
-                    name="dueDate"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Due date</FormLabel>
-                            <FormControl>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant={"outline"}
-                                            className={cn(
-                                                "w-full pl-3 text-left font-normal",
-                                                !field.value && "text-muted-foreground"
-                                            )}
-                                        >
-                                            {field.value ? (
-                                                format(field.value, "PPP")
-                                            ) : (
-                                                <span>Pick a date</span>
-                                            )}
-                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0" align="start">
-                                        <Calendar
-                                            mode="single"
-                                            selected={field.value}
-                                            onSelect={field.onChange}
-                                            disabled={(date) =>
-                                                date < new Date("1900-01-01")
-                                            }
-                                            initialFocus
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                            </FormControl>
-                            <FormDescription>
-                                What is the project due date?
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                />)}
                 <Button type="submit">Submit</Button>
             </form>
         </Form>
