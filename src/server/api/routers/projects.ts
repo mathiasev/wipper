@@ -14,7 +14,6 @@ export const projectRouter = createTRPCRouter({
       description: z.string().min(1),
       companyId: z.string().min(1)
     }))
-
     .mutation(async ({ ctx, input }) => {
       return ctx.db.project.create({
         data: {
@@ -26,33 +25,30 @@ export const projectRouter = createTRPCRouter({
       });
     }),
 
-  getLatest: protectedProcedure
+  getCompanyProjects: protectedProcedure
     .input(z.object({
-      companyId: z.string().optional(),
+      companyId: z.string(),
       page_size: z.number().default(5),
       page: z.number().default(0)
     }))
     .query(({ ctx, input }) => {
-
-      if (input.companyId) {
-        return ctx.db.project.findMany({
-          orderBy: { createdAt: "desc" },
-          where: {
-            createdById: { equals: ctx.session.userId },
-            companyId: { equals: input.companyId }
-          },
-          take: input.page_size,
-          skip: input.page
-        })
-      }
-
       return ctx.db.project.findMany({
         orderBy: { createdAt: "desc" },
-        where: { createdById: { equals: ctx.session.userId }, },
+        where: {
+          createdById: { equals: ctx.session.userId },
+          companyId: { equals: input.companyId }
+        },
         take: input.page_size,
         skip: input.page
-      });
+      })
     }),
+
+  getProjects: protectedProcedure.query(({ ctx, input }) => {
+    return ctx.db.project.findMany({
+      orderBy: { createdAt: "desc" },
+      where: { createdById: { equals: ctx.session.userId } },
+    });
+  }),
 
   getProjectById: protectedProcedure
     .input(z.object({

@@ -16,28 +16,10 @@ import {
     FormLabel,
     FormMessage,
 } from "~/components/ui/form"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "~/components/ui/popover"
-import { Calendar } from "~/components/ui/calendar"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "~/components/ui/select"
 
 import { Input } from "~/components/ui/input"
 import { Textarea } from "~/components/ui/textarea"
-import { cn } from "~/lib/utils"
-import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
 import { api } from "~/trpc/react"
-import { propagateServerField } from "next/dist/server/lib/render-server"
-import { ReactEventHandler } from "react"
 
 const FormSchema = z.object({
     name: z.string().min(1, {
@@ -51,8 +33,8 @@ const FormSchema = z.object({
 })
 
 
-export function CreateProjectForm({ companyId = undefined, handleCreate }: { companyId: string | undefined, handleCreate: ReactEventHandler }) {
-    let companies = undefined;
+export function CreateCompanyProjectForm({ companyId }: { companyId: string }) {
+
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -64,16 +46,11 @@ export function CreateProjectForm({ companyId = undefined, handleCreate }: { com
 
     })
 
-    if (companyId === undefined) {
-        companies = api.company.getLatest.useQuery();
-    }
-
 
     const { mutate } = api.project.create.useMutation({
         onSuccess: (e) => {
             toast("Project created")
             form.reset();
-
         },
         onError: (e) => {
             toast("Error", {
@@ -90,7 +67,6 @@ export function CreateProjectForm({ companyId = undefined, handleCreate }: { com
             companyId: data.companyId
         })
 
-        console.log(data);
     }
 
     return (
@@ -130,34 +106,6 @@ export function CreateProjectForm({ companyId = undefined, handleCreate }: { com
                         </FormItem>
                     )}
                 />
-                {companyId === undefined && companies !== undefined && (<FormField
-                    control={form.control}
-                    name="companyId"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Company</FormLabel>
-
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a company." />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    {companies?.data?.map(company => (
-                                        <SelectItem value={company.id}>{company.name}</SelectItem>
-                                    ))}
-
-                                </SelectContent>
-                            </Select>
-
-                            <FormDescription>
-                                What is the project description?
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />)}
                 <Button type="submit">Submit</Button>
             </form>
         </Form>

@@ -1,12 +1,7 @@
-"use client";
-
-import { api } from "~/trpc/react";
-
-import { Badge } from "~/components/ui/badge"
 import {
     Card,
     CardContent,
-    CardDescription,
+
     CardHeader,
     CardTitle,
 } from "~/components/ui/card"
@@ -19,23 +14,10 @@ import {
     TableRow,
 } from "~/components/ui/table"
 import Link from "next/link";
-import { toast } from "sonner";
-import { CreateProjectSheet } from "./create-project";
+import { Project } from "@prisma/client";
 
 
-export function ProjectList({ companyId = undefined }: { companyId: string | undefined }) {
-    const [projects, projectsQuery] = api.project.getLatest.useSuspenseQuery(
-        {
-            companyId: companyId
-        }
-    );
-    if (projectsQuery.isError) return (
-        toast("Error", {
-            important: true,
-            description: projectsQuery.error?.message
-        })
-
-    )
+export function ProjectList({ projects }: { projects: Project[] }) {
 
     return (
 
@@ -44,9 +26,7 @@ export function ProjectList({ companyId = undefined }: { companyId: string | und
                 <div className="flex justify-between gap-4">
                     <div>
                         <CardTitle>Projects</CardTitle>
-                        <CardDescription>All projects for {companyId}</CardDescription>
                     </div>
-                    <CreateProjectSheet companyId={companyId} />
                 </div>
             </CardHeader>
             <CardContent>
@@ -76,12 +56,9 @@ export function ProjectList({ companyId = undefined }: { companyId: string | und
                                 </TableCell>
                             </TableRow>
                         )}
-
-
                     </TableBody>
                 </Table>
             </CardContent>
         </Card>
-
     );
 }
