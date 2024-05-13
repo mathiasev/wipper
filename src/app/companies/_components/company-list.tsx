@@ -21,7 +21,7 @@ import {
 import Link from "next/link";
 
 
-export function CompanyList() {
+export async function CompanyList() {
     const [companies, companyQuery] = api.company.getLatest.useSuspenseQuery();
     if (companyQuery.isError) return (
         <Badge variant={"destructive"}>Error</Badge>

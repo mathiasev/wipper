@@ -1,23 +1,25 @@
 "use client"
-import { Project } from "@prisma/client";
-import { ProjectUpdateList } from "~/app/project-updates/_components/project-list";
 import { PageHeader } from "~/components/page-header";
+import { ProjectUpdateList } from "~/components/project-update-list";
 import { api } from "~/trpc/react";
 
 export default function ProjectPage({ params }: { params: { projectId: string } }) {
 
+    const project = api.project.getProjectById.useQuery({ projectId: params.projectId })
+    const [projectUpdates, projectUpdateQuery] = api.projectUpdate.getProjectUpdatesByProject.useSuspenseQuery({
+        projectId: params.projectId
+    });
 
-    const Project = api.project.getProjectById.useQuery({ projectId: params.projectId })
 
     return (
         <div className="flex flex-col gap-4">
             <PageHeader>
-                {Project.data?.name}
+                {project.data?.name}
             </PageHeader>
             <div>
-
-                <ProjectUpdateList projectId={Project.data?.id}
-                />
+                {projectUpdates &&
+                    <ProjectUpdateList projects={projectUpdates} />
+                }
             </div>
         </div>
     )

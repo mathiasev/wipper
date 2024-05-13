@@ -2,8 +2,7 @@ import { z } from "zod";
 
 import {
   createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
+  protectedProcedure
 } from "~/server/api/trpc";
 
 export const projectRouter = createTRPCRouter({
@@ -43,7 +42,7 @@ export const projectRouter = createTRPCRouter({
       })
     }),
 
-  getProjects: protectedProcedure.query(({ ctx, input }) => {
+  getProjects: protectedProcedure.query(({ ctx }) => {
     return ctx.db.project.findMany({
       orderBy: { createdAt: "desc" },
       where: { createdById: { equals: ctx.session.userId } },

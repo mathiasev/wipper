@@ -6,7 +6,7 @@ import { CreateCompanyProjectSheet } from "./create-company-project";
 import { ProjectList } from "~/components/project-list";
 
 
-export function CompanyProjectList({ companyId }: { companyId: string }) {
+export async function CompanyProjectList({ companyId }: { companyId: string }) {
     const [projects, projectsQuery] = api.project.getCompanyProjects.useSuspenseQuery(
         {
             companyId: companyId
@@ -21,11 +21,10 @@ export function CompanyProjectList({ companyId }: { companyId: string }) {
     )
 
     return (
-        <>
-
+        <div className="flex flex-col gap-4">
             <CreateCompanyProjectSheet companyId={companyId} />
             <ProjectList projects={projects} />
-        </>
+        </div>
     )
 
 

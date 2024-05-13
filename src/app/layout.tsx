@@ -26,6 +26,7 @@ import { Button } from "~/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet"
 import { cn } from "~/lib/utils";
 import Navigation from "~/components/navigation";
+import { TooltipProvider } from "~/components/ui/tooltip";
 
 
 export default function RootLayout({
@@ -44,44 +45,46 @@ export default function RootLayout({
               attribute="class"
               defaultTheme="dark"
             >
-              {/* Start UI */}
-              <div className={cn("flex min-h-screen w-full flex-col font-sans", inter.variable)}>
-                <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-                  <Navigation />
-                  <Sheet>
-                    <SheetTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="shrink-0 md:hidden"
-                      >
-                        <Menu className="h-5 w-5" />
-                        <span className="sr-only">Toggle navigation menu</span>
-                      </Button>
-                    </SheetTrigger>
-                    <SheetContent side="left">
-                      <nav className="grid gap-6 text-lg font-medium">
-                        <Menu />
-                      </nav>
-                    </SheetContent>
-                  </Sheet>
-                  <div className="flex justify-end w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-                    <SignedIn>
-                      <UserButton />
-                    </SignedIn>
-                    <SignedOut>
-                      <SignInButton />
-                    </SignedOut>
-                  </div>
-                </header>
-                <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-                  <div className="mx-auto grid w-full max-w-6xl gap-2">
-                    {children}
-                  </div>
-                </main>
-              </div>
-              {/* End UI */}
-              <Toaster />
+              <TooltipProvider>
+                {/* Start UI */}
+                <div className={cn("flex min-h-screen w-full flex-col font-sans", inter.variable)}>
+                  <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+                    <Navigation />
+                    <Sheet>
+                      <SheetTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="shrink-0 md:hidden"
+                        >
+                          <Menu className="h-5 w-5" />
+                          <span className="sr-only">Toggle navigation menu</span>
+                        </Button>
+                      </SheetTrigger>
+                      <SheetContent side="left">
+                        <nav className="grid gap-6 text-lg font-medium">
+                          <Menu />
+                        </nav>
+                      </SheetContent>
+                    </Sheet>
+                    <div className="flex justify-end w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+                      <SignedIn>
+                        <UserButton />
+                      </SignedIn>
+                      <SignedOut>
+                        <SignInButton />
+                      </SignedOut>
+                    </div>
+                  </header>
+                  <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+                    <div className="mx-auto grid w-full max-w-6xl gap-2">
+                      {children}
+                    </div>
+                  </main>
+                </div>
+                {/* End UI */}
+                <Toaster />
+              </TooltipProvider>
             </ThemeProvider>
           </body>
         </html>
