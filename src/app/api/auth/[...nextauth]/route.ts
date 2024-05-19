@@ -1,8 +1,13 @@
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { PrismaClient } from "@prisma/client";
 import NextAuth from "next-auth"
 import AzureADProvider from "next-auth/providers/azure-ad";
 
+const prisma = new PrismaClient()
 
 const handler = NextAuth({
+    adapter: PrismaAdapter(prisma),
+
 
     providers: [
         // AzureADProvider({
@@ -36,16 +41,19 @@ const handler = NextAuth({
 
             userinfo: "https://launchpad.37signals.com/authorization.json",
 
-
             profile(profile, tokens) {
                 console.log("profile", profile);
                 return {
-                    id: profile.id,
-                    name: profile?.name
+                    id: `${profile.identity.id}`,
+                    name: profile.identity.first_name + " " + profile.identity.last_name,
+                    email: profile.identity.email_address,
+                    basecampAccount: profile.accounts[0].id
                 }
             },
             clientId: process.env.BASECAMP_CLIENT_ID,
             clientSecret: process.env.BASECAMP_CLIENT_SECRET
+
+
 
 
         }

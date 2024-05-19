@@ -20,7 +20,7 @@ import { Input } from "~/components/ui/input"
 
 
 export function CreateCompany() {
-    const router = useRouter();
+
     const [companyName, setCompanyName] = useState("");
 
     const createCompany = api.company.create.useMutation({

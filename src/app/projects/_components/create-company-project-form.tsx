@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Project } from "@prisma/client"
 import { useForm } from "react-hook-form"
 
 import { toast } from "sonner"
@@ -49,7 +50,7 @@ export function CreateCompanyProjectForm({ companyId }: { companyId: string }) {
 
     const { mutate } = api.project.create.useMutation({
         onSuccess: (e) => {
-            toast("Project created")
+            toast(`${e.name} created`)
             form.reset();
         },
         onError: (e) => {

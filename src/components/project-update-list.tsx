@@ -1,12 +1,8 @@
 "use client";
 
-import { api } from "~/trpc/react";
-
-import { Badge } from "~/components/ui/badge"
 import {
     Card,
     CardContent,
-    CardDescription,
     CardHeader,
     CardTitle,
 } from "~/components/ui/card"
@@ -19,8 +15,7 @@ import {
     TableRow,
 } from "~/components/ui/table"
 import Link from "next/link";
-import { toast } from "sonner";
-import { ProjectUpdate } from "@prisma/client";
+import type { ProjectUpdate } from "@prisma/client";
 
 
 export function ProjectUpdateList({ projectUpdates }: { projectUpdates: ProjectUpdate[] }) {

@@ -13,6 +13,7 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
     CLERK_SECRET_KEY: z.string(),
+    CLERK_WEBHOOK_SECRET: z.string(),
     // AZURE_AD_CLIENT_ID: z.string(),
     // AZURE_AD_CLIENT_SECRET: z.string(),
     // AZURE_AD_TENANT_ID: z.string(),
@@ -39,6 +40,7 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    CLERK_WEBHOOK_SECRET: process.env.CLERK_WEBHOOK_SECRET,
     // AZURE_AD_CLIENT_ID: process.env.AZURE_AD_CLIENT_ID,
     // AZURE_AD_CLIENT_SECRET: process.env.AZURE_AD_CLIENT_SECRET,
     // AZURE_AD_TENANT_ID: process.env.AZURE_AD_TENANT_ID,

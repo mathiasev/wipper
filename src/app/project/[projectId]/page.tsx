@@ -6,8 +6,8 @@ import { api } from "~/trpc/react";
 
 export default async function ProjectPage({ params }: { params: { projectId: string } }) {
 
-    const [project, projectsQuery] = api.project.getProjectById.useSuspenseQuery({ projectId: params.projectId })
-    const [projectUpdates, projectUpdateQuery] = api.projectUpdate.getProjectUpdatesByProject.useSuspenseQuery({ projectId: params.projectId })
+    const [project] = api.project.getProjectById.useSuspenseQuery({ projectId: params.projectId })
+    const [projectUpdates] = api.projectUpdate.getProjectUpdatesByProject.useSuspenseQuery({ projectId: params.projectId })
 
 
 

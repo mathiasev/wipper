@@ -14,7 +14,7 @@ import {
     TableRow,
 } from "~/components/ui/table"
 import Link from "next/link";
-import { Project } from "@prisma/client";
+import type { Project } from "@prisma/client";
 
 
 export function ProjectList({ projects }: { projects: Project[] }) {

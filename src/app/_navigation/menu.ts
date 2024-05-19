@@ -23,6 +23,12 @@ const menu: MenuItem[] = [
         route: '/companies',
         isProtected: true,
         protectionRule: "/companies(.*)"
+    },
+    {
+        name: "Settings",
+        route: '/settings',
+        isProtected: true,
+        protectionRule: "/settings(.*)"
     }
 ]
 export default menu;

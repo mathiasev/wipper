@@ -7,6 +7,11 @@ import menu from "~/app/_navigation/menu"
 import { cn } from "~/lib/utils"
 
 export default function Navigation() {
+
+    function isActiveMenuItem(itemName: string) {
+        return usePathname() == itemName
+    }
+
     return (<nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
         <Link
             href="#"
@@ -21,7 +26,7 @@ export default function Navigation() {
                 href={menuItem.route}
                 className={
                     cn(" transition-colors hover:text-foreground",
-                        usePathname() == menuItem.route ?
+                        isActiveMenuItem(menuItem.route) ?
                             "text-foreground" : "text-muted-foreground")
                 }
             >

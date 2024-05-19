@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { cn } from "~/lib/utils"
 
-// @ts-ignore
+// @ts-expect-error:no-empty-interface
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> { }
 

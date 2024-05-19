@@ -6,7 +6,7 @@ import { api } from "~/trpc/react";
 export default function ProjectPage({ params }: { params: { projectId: string } }) {
 
     const project = api.project.getProjectById.useQuery({ projectId: params.projectId })
-    const [projectUpdates, projectUpdateQuery] = api.projectUpdate.getProjectUpdatesByProject.useSuspenseQuery({
+    const [projectUpdates] = api.projectUpdate.getProjectUpdatesByProject.useSuspenseQuery({
         projectId: params.projectId
     });
 
@@ -18,7 +18,7 @@ export default function ProjectPage({ params }: { params: { projectId: string } 
             </PageHeader>
             <div>
                 {projectUpdates &&
-                    <ProjectUpdateList projects={projectUpdates} />
+                    <ProjectUpdateList projectUpdates={projectUpdates} />
                 }
             </div>
         </div>
